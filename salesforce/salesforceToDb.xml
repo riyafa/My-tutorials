@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<proxy xmlns="http://ws.apache.org/ns/synapse"
+       name="salesforceToDb"
+       transports="http https"
+       startOnLoad="true"
+       trace="disable">
+   <description/>
+   <target>
+      <inSequence>
+         <salesforce.init configKey="salesforceLogin"/>
+         <salesforce.query>
+            <batchSize>1</batchSize>
+            <queryString>SELECT firstname,title,lastname,email,description FROM Lead limit 10</queryString>
+         </salesforce.query>
+         <iterate xmlns:abc="urn:partner.soap.sforce.com"
+                  id="iterator1"
+                  expression="//abc:records"
+                  sequential="true">
+            <target>
+               <sequence>
+                  <publishEvent>
+                     <eventSink>sampleEventSink</eventSink>
+                     <streamName>salesForceStream</streamName>
+                     <streamVersion>1.0.0</streamVersion>
+                     <attributes>
+                        <meta/>
+                        <correlation/>
+                        <payload>
+                           <attribute xmlns:sf="urn:sobject.partner.soap.sforce.com"
+                                      name="FirstName"
+                                      type="STRING"
+                                      defaultValue=""
+                                      expression="//sf:FirstName"/>
+                           <attribute xmlns:sf="urn:sobject.partner.soap.sforce.com"
+                                      name="Title"
+                                      type="STRING"
+                                      defaultValue=""
+                                      expression="//sf:Title"/>
+                           <attribute xmlns:sf="urn:sobject.partner.soap.sforce.com"
+                                      name="LastName"
+                                      type="STRING"
+                                      defaultValue=""
+                                      expression="//sf:LastName"/>
+                           <attribute xmlns:sf="urn:sobject.partner.soap.sforce.com"
+                                      name="Email"
+                                      type="STRING"
+                                      defaultValue=""
+                                      expression="//sf:Email"/>
+                           <attribute xmlns:sf="urn:sobject.partner.soap.sforce.com"
+                                      name="Description"
+                                      type="STRING"
+                                      defaultValue=""
+                                      expression="//sf:Description"/>
+                        </payload>
+                        <arbitrary/>
+                     </attributes>
+                  </publishEvent>
+               </sequence>
+            </target>
+         </iterate>
+      </inSequence>
+   </target>
+</proxy>

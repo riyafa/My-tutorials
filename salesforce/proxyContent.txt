@@ -1,0 +1,27 @@
+<salesforce.init configKey="salesforceLogin"/>
+
+<salesforce.query>
+            <batchSize>1</batchSize>
+            <queryString>SELECT firstname,title,lastname,email,description FROM Lead limit 10</queryString>
+</salesforce.query>
+
+<salesforce.init xmlns="http://ws.apache.org/ns/synapse">
+    <username>someone@wso2.com</username>
+    <password>p1xre@dfkjejoirejjkjjsjoisi</password>
+    <loginUrl>https://login.salesforce.com/services/Soap/u/29.0</loginUrl>
+    <forceLogin/>
+</salesforce.init>
+
+·         Datasource type : RDBMS
+·         Name : Proper Name
+·         Driver : com.mysql.jdbc.Driver
+·         URL : jdbc:mysql://localhost:3306/<database name>
+·         User Name : <mysql username>
+·         Password : <mysql password>
+
+
+create temporary table xxx using CarbonAnalytics options (tableName "<data stream name>", schema  "attribute_name data_type");
+select * from xxx limit 20;
+create temporary table yyy using CarbonJDBC options (datasource "<data source name>", tableName "<table name >");
+insert into table yyy select * from xxx  
+
